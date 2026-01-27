@@ -9,14 +9,14 @@
 .page-header h1 {
   font-size: 36px;
   font-weight: 800;
-  color: #0f172a;
+  color: #ffffff;
   margin-bottom: 8px;
   letter-spacing: -0.5px;
 }
 
 .page-header p {
   font-size: 17px;
-  color: #64748b;
+  color: #8a92a8;
 }
 
 /* Search Section */
@@ -81,21 +81,23 @@
 
 /* Table */
 .table-container {
-  background: white;
+  background: #1a1f2e;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   margin-bottom: 24px;
+  border: 1px solid #2a3142;
 }
 
 .posts-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .posts-table thead {
-  background: #f8fafc;
-  border-bottom: 2px solid #e2e8f0;
+  background: #252d3d;
+  border-bottom: 2px solid #2a3142;
 }
 
 .posts-table th {
@@ -103,24 +105,45 @@
   text-align: left;
   font-size: 14px;
   font-weight: 700;
-  color: #475569;
+  color: #8a92a8;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  word-break: break-word;
+}
+
+.posts-table th:nth-child(1) {
+  width: 20%;
+}
+
+.posts-table th:nth-child(2) {
+  width: 40%;
+}
+
+.posts-table th:nth-child(3) {
+  width: 12%;
+}
+
+.posts-table th:nth-child(4) {
+  width: 16%;
+}
+
+.posts-table th:nth-child(5) {
+  width: 12%;
 }
 
 .posts-table tbody tr {
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #2a3142;
   transition: all 0.2s;
 }
 
 .posts-table tbody tr:hover {
-  background: #f8fafc;
+  background: #252d3d;
 }
 
 .posts-table td {
   padding: 16px 20px;
   font-size: 15px;
-  color: #475569;
+  color: #e0e0e0;
 }
 
 .user-cell {
@@ -133,7 +156,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -151,18 +174,18 @@
 
 .user-name {
   font-weight: 600;
-  color: #1e293b;
+  color: #ffffff;
 }
 
 .user-mobile {
   font-size: 13px;
-  color: #94a3b8;
+  color: #8a92a8;
 }
 
 .caption-cell {
-  max-width: 300px;
+  max-width: 250px;
   word-break: break-word;
-  color: #1e293b;
+  color: #e0e0e0;
 }
 
 .likes-cell {
@@ -171,8 +194,8 @@
 
 .likes-badge {
   display: inline-block;
-  background: #fee2e2;
-  color: #dc2626;
+  background: #dc2626;
+  color: white;
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 14px;
@@ -216,19 +239,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 12px;
   padding: 24px;
-  background: white;
+  background: #1a1f2e;
   border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid #2a3142;
+  flex-wrap: wrap;
 }
 
 .pagination-btn {
-  padding: 12px 20px;
-  background: #f1f5f9;
-  color: #475569;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
+  padding: 10px 16px;
+  background: #252d3d;
+  color: #8a92a8;
+  border: 2px solid #2a3142;
+  border-radius: 8px;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -236,8 +261,9 @@
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background: #e2e8f0;
-  border-color: #cbd5e1;
+  background: #2a3142;
+  border-color: #00d4ff;
+  color: #00d4ff;
 }
 
 .pagination-btn:disabled {
@@ -245,10 +271,40 @@
   cursor: not-allowed;
 }
 
+.pagination-number {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: #252d3d;
+  color: #8a92a8;
+  border: 2px solid #2a3142;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-number:hover {
+  background: #2a3142;
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+
+.pagination-number.active {
+  background: #00d4ff;
+  color: #0f1419;
+  border-color: #00d4ff;
+  font-weight: 700;
+}
+
 .pagination-info {
   font-size: 15px;
   font-weight: 600;
-  color: #475569;
+  color: #8a92a8;
   min-width: 200px;
   text-align: center;
 }
