@@ -38,10 +38,14 @@ const EcoLocations = () => {
     description: '',
     latitude: '',
     longitude: '',
-    category: 'park',
+    category: 'urban-park',
     address: '',
   });
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const mapRef = useRef(null);
+  const modalRef = useRef(null);
   const itemsPerPage = 10;
 
   // Kathmandu Valley bounds
@@ -62,6 +66,17 @@ const EcoLocations = () => {
       }, 100);
     }
   }, []);
+
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, dragOffset]);
 
   const fetchLocations = async () => {
     try {
@@ -93,6 +108,9 @@ const EcoLocations = () => {
 
     try {
       setLoading(true);
+      // Simulate network delay for realistic UX
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
       const response = await fetch(
         `http://localhost:8000/admin/eco-locations/search?query=${encodeURIComponent(searchQuery)}&skip=0&limit=${itemsPerPage}`
       );
@@ -267,6 +285,30 @@ const EcoLocations = () => {
     });
   };
 
+  const handleMouseDown = (e) => {
+    if (e.target.closest('.form-header')) {
+      setIsDragging(true);
+      const rect = modalRef.current.getBoundingClientRect();
+      setDragOffset({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    if (isDragging && modalRef.current) {
+      setModalPosition({
+        x: e.clientX - dragOffset.x,
+        y: e.clientY - dragOffset.y,
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
   const totalPages = Math.ceil(totalLocations / itemsPerPage);
 
   const categoryColors = {
@@ -295,7 +337,7 @@ const EcoLocations = () => {
             className="search-input"
           />
           <button type="submit" className="search-btn">
-            🔍 Search
+             Search
           </button>
           {searchQuery && (
             <button
@@ -315,7 +357,7 @@ const EcoLocations = () => {
           className="add-btn"
           onClick={() => setShowForm(true)}
         >
-          ➕ Add Location
+           Add Location
         </button>
       </div>
 
@@ -425,7 +467,7 @@ const EcoLocations = () => {
                       </span>
                     </div>
                     <p className="location-description">{location.description}</p>
-                    <p className="location-address">📍 {location.address}</p>
+                    <p className="location-address"> {location.address}</p>
                     <p className="location-coords">
                       {location.latitude.toFixed(4)}, {location.longitude.toFixed(4)}
                     </p>
@@ -434,13 +476,13 @@ const EcoLocations = () => {
                         className="action-btn edit-btn"
                         onClick={() => handleEditLocation(location)}
                       >
-                        ✏️ Edit
+                         Edit
                       </button>
                       <button
                         className="action-btn delete-btn"
                         onClick={() => handleDeleteLocation(location._id)}
                       >
-                        🗑️ Delete
+                         Delete
                       </button>
                     </div>
                   </div>
@@ -454,17 +496,25 @@ const EcoLocations = () => {
                   onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
                   disabled={currentPage === 0}
                 >
-                  ← Previous
+                  Previous
                 </button>
-                <span className="pagination-info">
-                  Page {currentPage + 1} of {totalPages} ({totalLocations} total)
-                </span>
+                
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    className={`pagination-number ${currentPage === i ? 'active' : ''}`}
+                    onClick={() => setCurrentPage(i)}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                
                 <button
                   className="pagination-btn"
                   onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
                   disabled={currentPage >= totalPages - 1}
                 >
-                  Next →
+                  Next
                 </button>
               </div>
             </>
@@ -475,7 +525,18 @@ const EcoLocations = () => {
       {/* Add/Edit Form Modal */}
       {showForm && (
         <div className="form-modal-overlay" onClick={handleCloseForm}>
-          <div className="form-modal" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="form-modal"
+            ref={modalRef}
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={handleMouseDown}
+            style={{
+              position: 'fixed',
+              left: `${modalPosition.x}px`,
+              top: `${modalPosition.y}px`,
+              cursor: isDragging ? 'grabbing' : 'grab',
+            }}
+          >
             <div className="form-header">
               <h2>{editingLocation ? 'Edit Eco-Location' : 'Add New Eco-Location'}</h2>
               <button className="form-close" onClick={handleCloseForm}>

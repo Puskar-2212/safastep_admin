@@ -9,14 +9,14 @@
 .page-header h1 {
   font-size: 36px;
   font-weight: 800;
-  color: #0f172a;
+  color: #ffffff;
   margin-bottom: 8px;
   letter-spacing: -0.5px;
 }
 
 .page-header p {
   font-size: 17px;
-  color: #64748b;
+  color: #8a92a8;
 }
 
 /* Search Section */
@@ -38,21 +38,27 @@
   flex: 1;
   max-width: 500px;
   padding: 14px 18px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid #2a3142;
   border-radius: 12px;
   font-size: 16px;
   transition: all 0.2s;
+  background: #252d3d;
+  color: #ffffff;
+}
+
+.search-input::placeholder {
+  color: #8a92a8;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #6366f1;
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  border-color: #00d4ff;
+  box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1);
 }
 
 .search-btn {
   padding: 14px 24px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -64,14 +70,14 @@
 
 .search-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 16px rgba(0, 212, 255, 0.3);
 }
 
 .clear-btn {
   padding: 14px 20px;
-  background: #f1f5f9;
-  color: #64748b;
-  border: 2px solid #e2e8f0;
+  background: #252d3d;
+  color: #8a92a8;
+  border: 2px solid #2a3142;
   border-radius: 12px;
   font-size: 16px;
   font-weight: 600;
@@ -80,12 +86,14 @@
 }
 
 .clear-btn:hover {
-  background: #e2e8f0;
+  background: #2a3142;
+  border-color: #00d4ff;
+  color: #00d4ff;
 }
 
 .add-btn {
   padding: 14px 24px;
-  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -98,7 +106,7 @@
 
 .add-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3);
+  box-shadow: 0 8px 16px rgba(46, 204, 113, 0.3);
 }
 
 /* Content Wrapper */
@@ -196,12 +204,13 @@
 
 /* List Section */
 .list-section {
-  background: white;
+  background: #1a1f2e;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
+  border: 1px solid #2a3142;
 }
 
 .loading {
@@ -210,7 +219,7 @@
   justify-content: center;
   min-height: 400px;
   font-size: 18px;
-  color: #64748b;
+  color: #8a92a8;
 }
 
 .empty-state {
@@ -218,12 +227,12 @@
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  border: 2px dashed #e2e8f0;
+  border: 2px dashed #2a3142;
 }
 
 .empty-state p {
   font-size: 18px;
-  color: #94a3b8;
+  color: #8a92a8;
 }
 
 .locations-list {
@@ -234,12 +243,12 @@
 
 .location-card {
   padding: 16px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid #2a3142;
   transition: all 0.2s;
 }
 
 .location-card:hover {
-  background: #f8fafc;
+  background: #252d3d;
 }
 
 .location-card:last-child {
@@ -256,13 +265,13 @@
 .location-header h3 {
   font-size: 16px;
   font-weight: 700;
-  color: #1e293b;
+  color: #ffffff;
   margin: 0;
 }
 
 .location-header .category-badge {
-  background: #e0e7ff;
-  color: white;
+  background: #00d4ff;
+  color: #0f1419;
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 12px;
@@ -272,21 +281,21 @@
 
 .location-description {
   font-size: 13px;
-  color: #64748b;
+  color: #8a92a8;
   margin: 8px 0;
   line-height: 1.4;
 }
 
 .location-address {
   font-size: 13px;
-  color: #475569;
+  color: #e0e0e0;
   margin: 6px 0;
   font-weight: 500;
 }
 
 .location-coords {
   font-size: 12px;
-  color: #94a3b8;
+  color: #8a92a8;
   margin: 6px 0;
   font-family: monospace;
 }
@@ -300,28 +309,31 @@
 .action-btn {
   flex: 1;
   padding: 8px 12px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid #2a3142;
   border-radius: 8px;
-  background: #f1f5f9;
+  background: #252d3d;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  color: #8a92a8;
 }
 
 .action-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .edit-btn:hover {
-  background: #e0e7ff;
-  border-color: #6366f1;
+  background: #00d4ff;
+  border-color: #00d4ff;
+  color: #0f1419;
 }
 
 .delete-btn:hover {
-  background: #fee2e2;
+  background: #dc2626;
   border-color: #dc2626;
+  color: white;
 }
 
 /* Pagination */
@@ -329,16 +341,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 12px;
   padding: 16px;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid #2a3142;
+  flex-wrap: wrap;
 }
 
 .pagination-btn {
   padding: 10px 16px;
-  background: #f1f5f9;
-  color: #475569;
-  border: 2px solid #e2e8f0;
+  background: #252d3d;
+  color: #8a92a8;
+  border: 2px solid #2a3142;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
@@ -347,8 +360,9 @@
 }
 
 .pagination-btn:hover:not(:disabled) {
-  background: #e2e8f0;
-  border-color: #cbd5e1;
+  background: #2a3142;
+  border-color: #00d4ff;
+  color: #00d4ff;
 }
 
 .pagination-btn:disabled {
@@ -356,10 +370,40 @@
   cursor: not-allowed;
 }
 
+.pagination-number {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  background: #252d3d;
+  color: #8a92a8;
+  border: 2px solid #2a3142;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-number:hover {
+  background: #2a3142;
+  border-color: #00d4ff;
+  color: #00d4ff;
+}
+
+.pagination-number.active {
+  background: #00d4ff;
+  color: #0f1419;
+  border-color: #00d4ff;
+  font-weight: 700;
+}
+
 .pagination-info {
   font-size: 14px;
   font-weight: 600;
-  color: #475569;
+  color: #8a92a8;
   min-width: 180px;
   text-align: center;
 }
@@ -418,13 +462,19 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px;
-  border-bottom: 2px solid #f1f5f9;
+  border-bottom: 2px solid #2a3142;
+  cursor: grab;
+  user-select: none;
+}
+
+.form-header:active {
+  cursor: grabbing;
 }
 
 .form-header h2 {
   font-size: 24px;
   font-weight: 800;
-  color: #0f172a;
+  color: #ffffff;
   margin: 0;
 }
 
