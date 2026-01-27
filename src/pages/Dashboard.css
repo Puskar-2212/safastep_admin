@@ -9,14 +9,14 @@
 .page-header h1 {
   font-size: 36px;
   font-weight: 800;
-  color: #0f172a;
+  color: #ffffff;
   margin-bottom: 8px;
   letter-spacing: -0.5px;
 }
 
 .page-header p {
   font-size: 17px;
-  color: #64748b;
+  color: #8a92a8;
 }
 
 .loading,
@@ -26,13 +26,13 @@
   justify-content: center;
   min-height: 400px;
   font-size: 18px;
-  color: #64748b;
-  background: white;
+  color: #8a92a8;
+  background: #1a1f2e;
   border-radius: 16px;
 }
 
 .error {
-  color: #dc2626;
+  color: #ff6b6b;
 }
 
 /* Stats Cards */
@@ -44,19 +44,20 @@
 }
 
 .stat-card {
-  background: white;
+  background: #1a1f2e;
   border-radius: 16px;
   padding: 24px;
   display: flex;
   gap: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: all 0.2s;
-  border: 2px solid transparent;
+  border: 1px solid #2a3142;
 }
 
 .stat-card:hover {
-  border-color: #e2e8f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #00d4ff;
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
+  transform: translateY(-2px);
 }
 
 .stat-icon {
@@ -66,7 +67,7 @@
   justify-content: center;
   width: 60px;
   height: 60px;
-  background: #f8fafc;
+  background: #252d3d;
   border-radius: 12px;
   flex-shrink: 0;
 }
@@ -78,7 +79,7 @@
 .stat-content h3 {
   font-size: 14px;
   font-weight: 600;
-  color: #64748b;
+  color: #8a92a8;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0 0 8px 0;
@@ -87,13 +88,13 @@
 .stat-value {
   font-size: 32px;
   font-weight: 800;
-  color: #0f172a;
+  color: #00d4ff;
   margin: 0 0 8px 0;
 }
 
 .stat-change {
   font-size: 13px;
-  color: #16a34a;
+  color: #2ecc71;
   font-weight: 600;
 }
 
@@ -106,17 +107,23 @@
 }
 
 .metric-card {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border: 2px solid #e2e8f0;
+  background: #1a1f2e;
+  border: 1px solid #2a3142;
   border-radius: 12px;
   padding: 20px;
   text-align: center;
+  transition: all 0.2s;
+}
+
+.metric-card:hover {
+  border-color: #00d4ff;
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.1);
 }
 
 .metric-card h3 {
   font-size: 14px;
   font-weight: 600;
-  color: #64748b;
+  color: #8a92a8;
   margin: 0 0 12px 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -125,7 +132,7 @@
 .metric-value {
   font-size: 28px;
   font-weight: 800;
-  color: #6366f1;
+  color: #00d4ff;
   margin: 0;
 }
 
@@ -138,19 +145,20 @@
 }
 
 .chart-card {
-  background: white;
+  background: #1a1f2e;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   min-height: 400px;
   display: flex;
   flex-direction: column;
+  border: 1px solid #2a3142;
 }
 
 .chart-card h3 {
   font-size: 18px;
   font-weight: 700;
-  color: #0f172a;
+  color: #ffffff;
   margin: 0 0 20px 0;
   flex-shrink: 0;
 }
@@ -164,17 +172,18 @@
 
 /* Quick Actions */
 .quick-actions {
-  background: white;
+  background: #1a1f2e;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   margin-top: 40px;
+  border: 1px solid #2a3142;
 }
 
 .quick-actions h3 {
   font-size: 18px;
   font-weight: 700;
-  color: #0f172a;
+  color: #ffffff;
   margin: 0 0 24px 0;
 }
 
@@ -201,33 +210,33 @@
 }
 
 .users-btn {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
   color: white;
 }
 
 .users-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 16px rgba(0, 212, 255, 0.3);
 }
 
 .posts-btn {
-  background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+  background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
   color: white;
 }
 
 .posts-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(236, 72, 153, 0.3);
+  box-shadow: 0 8px 16px rgba(255, 107, 157, 0.3);
 }
 
 .locations-btn {
-  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
   color: white;
 }
 
 .locations-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3);
+  box-shadow: 0 8px 16px rgba(46, 204, 113, 0.3);
 }
 
 /* Responsive */

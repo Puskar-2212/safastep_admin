@@ -178,8 +178,6 @@ const Dashboard = () => {
                   data={pieData}
                   cx="50%"
                   cy="50%"
-                  labelLine={false}
-                  label={({ name, value }) => `${name}: ${value}`}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
@@ -189,7 +187,9 @@ const Dashboard = () => {
                   ))}
                 </Pie>
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: '8px', color: '#fff' }}
+                  formatter={(value) => `${value}`}
+                  labelFormatter={(label) => `${label}`}
+                  contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #2a3142', borderRadius: '8px', color: '#fff' }}
                 />
               </PieChart>
             </ResponsiveContainer>
