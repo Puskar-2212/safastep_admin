@@ -8,7 +8,7 @@ const Layout = ({ children, onLogout }) => {
     { path: '/dashboard', icon: '📊', label: 'Dashboard' },
     { path: '/users', icon: '👥', label: 'Users' },
     { path: '/posts', icon: '📝', label: 'Posts' },
-    { path: '/eco-locations', icon: '📍', label: 'Eco Locations' },
+    { path: '/eco-locations', icon: '🌿', label: 'Eco Locations' },
   ];
 
   return (
