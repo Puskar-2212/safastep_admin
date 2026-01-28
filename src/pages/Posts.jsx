@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Eye, Trash2, Search, X, Heart } from 'lucide-react';
 import './Posts.css';
 
 const Posts = () => {
@@ -131,7 +132,8 @@ const Posts = () => {
             className="search-input"
           />
           <button type="submit" className="search-btn">
-             Search
+            <Search size={18} />
+            <span>Search</span>
           </button>
           {searchQuery && (
             <button
@@ -187,7 +189,7 @@ const Posts = () => {
                       {truncateCaption(post.caption || 'No caption')}
                     </td>
                     <td className="likes-cell">
-                      <span className="likes-badge">❤️ {post.likes || 0}</span>
+                      <span className="likes-badge"><Heart size={16} /> {post.likes || 0}</span>
                     </td>
                     <td>
                       {new Date(post.createdAt * 1000).toLocaleDateString()}
@@ -198,14 +200,14 @@ const Posts = () => {
                         onClick={() => handleViewDetails(post._id)}
                         title="View details"
                       >
-                        👁️
+                        <Eye size={18} />
                       </button>
                       <button
                         className="action-btn delete-btn"
                         onClick={() => handleDeletePost(post._id)}
                         title="Delete post"
                       >
-                        🗑️
+                        <Trash2 size={18} />
                       </button>
                     </td>
                   </tr>
@@ -255,7 +257,7 @@ const Posts = () => {
                 className="modal-close"
                 onClick={() => setSelectedPost(null)}
               >
-                ✕
+                <X size={24} />
               </button>
             </div>
 

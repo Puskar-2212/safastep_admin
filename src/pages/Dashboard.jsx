@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { Users, FileText, Heart, MapPin } from 'lucide-react';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -72,7 +73,7 @@ const Dashboard = () => {
       {/* Stats Cards */}
       <div className="stats-cards">
         <div className="stat-card">
-          <div className="stat-icon">👥</div>
+          <div className="stat-icon"><Users size={32} /></div>
           <div className="stat-content">
             <h3>Total Users</h3>
             <p className="stat-value">{stats.total_users}</p>
@@ -81,7 +82,7 @@ const Dashboard = () => {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon">📝</div>
+          <div className="stat-icon"><FileText size={32} /></div>
           <div className="stat-content">
             <h3>Total Posts</h3>
             <p className="stat-value">{stats.total_posts}</p>
@@ -90,7 +91,7 @@ const Dashboard = () => {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon">❤️</div>
+          <div className="stat-icon"><Heart size={32} /></div>
           <div className="stat-content">
             <h3>Total Likes</h3>
             <p className="stat-value">{stats.total_likes}</p>
@@ -99,7 +100,7 @@ const Dashboard = () => {
         </div>
 
         <div className="stat-card">
-          <div className="stat-icon">📍</div>
+          <div className="stat-icon"><MapPin size={32} /></div>
           <div className="stat-content">
             <h3>Eco-Locations</h3>
             <p className="stat-value">{stats.total_eco_locations}</p>
@@ -197,21 +198,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="quick-actions">
-        <h3>Quick Actions</h3>
-        <div className="action-buttons">
-          <a href="/users" className="action-btn users-btn">
-            👥 Manage Users
-          </a>
-          <a href="/posts" className="action-btn posts-btn">
-            📝 Manage Posts
-          </a>
-          <a href="/eco-locations" className="action-btn locations-btn">
-            📍 Manage Eco-Locations
-          </a>
-        </div>
-      </div>
     </div>
   );
 };

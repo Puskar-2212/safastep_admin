@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Eye, Trash2, Search, X } from 'lucide-react';
 import './Users.css';
 
 const Users = () => {
@@ -127,7 +128,8 @@ const Users = () => {
             className="search-input"
           />
           <button type="submit" className="search-btn">
-             Search
+            <Search size={18} />
+            <span>Search</span>
           </button>
           {searchQuery && (
             <button
@@ -193,14 +195,14 @@ const Users = () => {
                         onClick={() => handleViewDetails(user._id)}
                         title="View details"
                       >
-                        👁️
+                        <Eye size={18} />
                       </button>
                       <button
                         className="action-btn delete-btn"
                         onClick={() => handleDeleteUser(user._id)}
                         title="Delete user"
                       >
-                        🗑️
+                        <Trash2 size={18} />
                       </button>
                     </td>
                   </tr>
@@ -250,7 +252,7 @@ const Users = () => {
                 className="modal-close"
                 onClick={() => setSelectedUser(null)}
               >
-                ✕
+                <X size={24} />
               </button>
             </div>
 

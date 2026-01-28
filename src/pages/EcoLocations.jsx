@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
+import { Search, Plus, Edit2, Trash2, X } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import './EcoLocations.css';
 
@@ -337,7 +338,8 @@ const EcoLocations = () => {
             className="search-input"
           />
           <button type="submit" className="search-btn">
-             Search
+            <Search size={18} />
+            <span>Search</span>
           </button>
           {searchQuery && (
             <button
@@ -357,7 +359,8 @@ const EcoLocations = () => {
           className="add-btn"
           onClick={() => setShowForm(true)}
         >
-           Add Location
+          <Plus size={18} />
+          <span>Add Location</span>
         </button>
       </div>
 
@@ -476,13 +479,15 @@ const EcoLocations = () => {
                         className="action-btn edit-btn"
                         onClick={() => handleEditLocation(location)}
                       >
-                         Edit
+                        <Edit2 size={16} />
+                        <span>Edit</span>
                       </button>
                       <button
                         className="action-btn delete-btn"
                         onClick={() => handleDeleteLocation(location._id)}
                       >
-                         Delete
+                        <Trash2 size={16} />
+                        <span>Delete</span>
                       </button>
                     </div>
                   </div>
@@ -540,7 +545,7 @@ const EcoLocations = () => {
             <div className="form-header">
               <h2>{editingLocation ? 'Edit Eco-Location' : 'Add New Eco-Location'}</h2>
               <button className="form-close" onClick={handleCloseForm}>
-                ✕
+                <X size={24} />
               </button>
             </div>
 
