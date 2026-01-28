@@ -37,6 +37,13 @@
   font-weight: 500;
 }
 
+.logo-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+  display: block;
+}
+
 .sidebar-nav {
   flex: 1;
   display: flex;
