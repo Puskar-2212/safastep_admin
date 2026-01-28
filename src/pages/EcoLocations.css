@@ -66,6 +66,10 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .search-btn:hover {
@@ -102,6 +106,10 @@
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .add-btn:hover {
@@ -317,6 +325,10 @@
   cursor: pointer;
   transition: all 0.2s;
   color: #8a92a8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
 .action-btn:hover {
