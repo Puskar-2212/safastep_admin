@@ -291,10 +291,17 @@ const Posts = () => {
                   <div className="post-image-section">
                     <h3>Image</h3>
                     <img
-                      src={postDetails.post.imageUrl}
+                      src={postDetails.post.imageUrl.replace(/https:\/\/[^/]+\.ngrok-free\.dev/, 'http://localhost:8000')}
                       alt="Post"
                       className="post-image"
+                      onError={(e) => {
+                        console.error('Image failed to load:', postDetails.post.imageUrl);
+                        e.target.style.display = 'none';
+                      }}
                     />
+                    <p className="image-url-debug" style={{fontSize: '10px', color: '#999', marginTop: '8px'}}>
+                      Original: {postDetails.post.imageUrl}
+                    </p>
                   </div>
                 )}
 
