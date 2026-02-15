@@ -14,15 +14,35 @@ const Login = ({ onLogin }) => {
     setError('');
     setLoading(true);
 
-    // TODO: Replace with actual API call
-    // For now, using hardcoded credentials
-    if (credentials.username === 'admin' && credentials.password === 'admin123') {
-      onLogin('dummy-token');
-    } else {
-      setError('Invalid username or password');
+    try {
+      const response = await fetch('http://localhost:8000/admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: credentials.username,
+          password: credentials.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        // Store token and user info
+        localStorage.setItem('adminToken', data.token);
+        localStorage.setItem('adminUsername', data.username);
+        localStorage.setItem('adminRole', data.role);
+        onLogin(data.token);
+      } else {
+        setError(data.detail || 'Invalid username or password');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Failed to connect to server. Please try again.');
+    } finally {
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   return (
