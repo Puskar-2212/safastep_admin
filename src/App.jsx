@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Posts from './pages/Posts';
+import PendingPosts from './pages/PendingPosts';
 import EcoLocations from './pages/EcoLocations';
 import './App.css';
 
@@ -94,6 +95,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/users" element={<Users />} />
           <Route path="/posts" element={<Posts />} />
+          <Route path="/pending-posts" element={<PendingPosts />} />
           <Route path="/eco-locations" element={<EcoLocations />} />
         </Routes>
       </Layout>
