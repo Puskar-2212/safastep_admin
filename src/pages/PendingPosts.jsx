@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Eye, Check, X, AlertCircle } from 'lucide-react';
+import { Eye, Check, X, AlertCircle, Clock, User } from 'lucide-react';
 import './PendingPosts.css';
 
 const PendingPosts = () => {
@@ -120,75 +120,87 @@ const PendingPosts = () => {
 
   return (
     <div className="pending-posts-container">
-      <div className="page-header">
-        <h1>Pending Posts Review</h1>
-        <div className="stats">
-          <div className="stat-badge">
+      {/* Top Header */}
+      <div className="pending-posts-header">
+        <div className="header-left">
+          <div className="header-icon">
+            <Clock size={32} />
+          </div>
+          <div className="header-text">
+            <h1>Pending Posts Review</h1>
+            <p>{posts.length} posts awaiting review</p>
+          </div>
+        </div>
+        <div className="header-right">
+          <div className="stats-badge">
             <AlertCircle size={20} />
             <span>{posts.length} posts waiting</span>
           </div>
         </div>
       </div>
 
-      {loading ? (
-        <div className="loading">Loading pending posts...</div>
-      ) : posts.length === 0 ? (
-        <div className="empty-state">
-          <AlertCircle size={48} />
-          <p>No posts pending review</p>
-        </div>
-      ) : (
-        <div className="posts-grid">
-          {posts.map((post) => (
-            <div key={post._id} className="post-card">
-              <div className="post-image">
-                <img 
-                  src={post.imageUrl} 
-                  alt="Post"
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Available';
-                  }}
-                />
-                <div className="category-badge">{post.category}</div>
-              </div>
-              
-              <div className="post-info">
-                <div className="user-info">
-                  <div className="user-avatar">
-                    {post.firstName?.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <div className="user-name">{post.firstName} {post.lastName}</div>
-                    <div className="post-time">{formatDate(post.createdAt)}</div>
-                  </div>
+      {/* Posts Content */}
+      <div className="posts-content">
+        {loading ? (
+          <div className="loading-state">Loading pending posts...</div>
+        ) : posts.length === 0 ? (
+          <div className="empty-state">
+            <AlertCircle size={48} />
+            <p>No posts pending review</p>
+          </div>
+        ) : (
+          <div className="posts-grid">
+            {posts.map((post) => (
+              <div key={post._id} className="post-card">
+                <div className="post-image">
+                  <img 
+                    src={post.imageUrl} 
+                    alt="Post"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Available';
+                    }}
+                  />
+                  <div className="category-badge">{post.category}</div>
                 </div>
-
-                <p className="caption">{post.caption}</p>
-
-                <div className="ai-results">
-                  <div className="ai-label">AI Detected:</div>
-                  <div className="detected-objects">
-                    {post.aiVerification?.matchedObjects?.map((obj, idx) => (
-                      <span key={idx} className="object-tag">
-                        {obj.object}
-                      </span>
-                    ))}
+                
+                <div className="post-info">
+                  <div className="user-info">
+                    <div className="user-avatar">
+                      {post.firstName?.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="user-details">
+                      <div className="user-name">{post.firstName} {post.lastName}</div>
+                      <div className="post-time">{formatDate(post.createdAt)}</div>
+                    </div>
                   </div>
-                </div>
 
-                <button
-                  className="review-btn"
-                  onClick={() => handleViewDetails(post._id)}
-                >
-                  <Eye size={18} />
-                  Review Post
-                </button>
+                  <p className="caption">{post.caption}</p>
+
+                  <div className="ai-results">
+                    <div className="ai-label">AI Detected:</div>
+                    <div className="detected-objects">
+                      {post.aiVerification?.matchedObjects?.map((obj, idx) => (
+                        <span key={idx} className="object-tag">
+                          {obj.object}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    className="review-btn"
+                    onClick={() => handleViewDetails(post._id)}
+                  >
+                    <Eye size={18} />
+                    Review Post
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Review Modal */}
       {selectedPost && (
