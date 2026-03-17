@@ -6,6 +6,7 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Posts from './pages/Posts';
 import PendingPosts from './pages/PendingPosts';
+import Challenges from './pages/Challenges';
 import EcoLocations from './pages/EcoLocations';
 import './App.css';
 
@@ -96,6 +97,7 @@ function App() {
           <Route path="/users" element={<Users />} />
           <Route path="/posts" element={<Posts />} />
           <Route path="/pending-posts" element={<PendingPosts />} />
+          <Route path="/challenges" element={<Challenges />} />
           <Route path="/eco-locations" element={<EcoLocations />} />
         </Routes>
       </Layout>

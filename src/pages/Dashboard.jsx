@@ -15,21 +15,52 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem('adminToken');
+      
+      console.log('Dashboard: Checking admin token:', token ? 'Token found' : 'No token found');
+      
+      if (!token) {
+        console.error('No admin token found');
+        setStats(null);
+        return;
+      }
+      
+      console.log('Dashboard: Making API calls with token');
       
       // Fetch stats
-      const statsResponse = await fetch('http://localhost:8000/admin/stats');
+      const statsResponse = await fetch('http://localhost:8000/admin/stats', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      console.log('Dashboard: Stats response status:', statsResponse.status);
+      
       const statsData = await statsResponse.json();
       
       // Fetch recent posts for activity
-      const postsResponse = await fetch('http://localhost:8000/admin/posts?limit=5');
+      const postsResponse = await fetch('http://localhost:8000/admin/posts?limit=5', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      console.log('Dashboard: Posts response status:', postsResponse.status);
+      
       const postsData = await postsResponse.json();
 
       if (statsData.success) {
+        console.log('Dashboard: Stats loaded successfully:', statsData.stats);
         setStats(statsData.stats);
+      } else {
+        console.error('Failed to fetch stats:', statsResponse.status, statsData);
       }
       
       if (postsData.success) {
+        console.log('Dashboard: Posts loaded successfully:', postsData.posts.length, 'posts');
         setRecentPosts(postsData.posts);
+      } else {
+        console.error('Failed to fetch posts:', postsResponse.status, postsData);
       }
     } catch (error) {
       console.error('Error fetching dashboard data:', error);

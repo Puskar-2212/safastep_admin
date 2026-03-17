@@ -22,13 +22,35 @@ const Users = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem('adminToken');
+      
+      console.log('Users: Checking admin token:', token ? 'Token found' : 'No token found');
+      
+      if (!token) {
+        console.error('No admin token found');
+        return;
+      }
+      
       const skip = currentPage * itemsPerPage;
-      const response = await fetch(`http://localhost:8000/admin/users?skip=${skip}&limit=${itemsPerPage}`);
+      console.log('Users: Making API call with token, skip:', skip, 'limit:', itemsPerPage);
+      
+      const response = await fetch(`http://localhost:8000/admin/users?skip=${skip}&limit=${itemsPerPage}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      console.log('Users: Response status:', response.status);
+      
       const data = await response.json();
+      console.log('Users: Response data:', data);
 
       if (data.success) {
+        console.log('Users: Loaded', data.users.length, 'users out of', data.total, 'total');
         setUsers(data.users);
         setTotalUsers(data.total);
+      } else {
+        console.error('Failed to fetch users:', response.status, data);
       }
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -50,13 +72,26 @@ const Users = () => {
     try {
       setLoading(true);
       setIsSearching(true);
-      const response = await fetch(`http://localhost:8000/admin/users/search?query=${encodeURIComponent(searchQuery)}&limit=100`);
+      const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        console.error('No admin token found');
+        return;
+      }
+      
+      const response = await fetch(`http://localhost:8000/admin/users/search?query=${encodeURIComponent(searchQuery)}&limit=100`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const data = await response.json();
 
       if (data.success) {
         setUsers(data.users);
         setTotalUsers(data.total);
         setCurrentPage(0);
+      } else {
+        console.error('Failed to search users:', response.status);
       }
     } catch (error) {
       console.error('Error searching users:', error);
@@ -74,12 +109,25 @@ const Users = () => {
 
   const handleUserClick = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:8000/admin/users/${userId}`);
+      const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        console.error('No admin token found');
+        return;
+      }
+      
+      const response = await fetch(`http://localhost:8000/admin/users/${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const data = await response.json();
 
       if (data.success) {
         setSelectedUser({ ...data.user, stats: data.stats });
         setShowModal(true);
+      } else {
+        console.error('Failed to fetch user details:', response.status);
       }
     } catch (error) {
       console.error('Error fetching user details:', error);
