@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { 
   Search, Plus, Filter, Eye, Edit, Trash2, ToggleLeft, ToggleRight, 
-  Users, Trophy, TrendingUp, Calendar, Target, AlertCircle 
+  Users, Trophy, TrendingUp, Calendar, Target, AlertCircle,
+  Activity, Leaf, Heart, Globe, Recycle, 
+  User, Brain, BookOpen, Dumbbell, TreePine, Zap
 } from 'lucide-react';
 import ChallengeModal from '../components/ChallengeModal';
 import './Challenges.css';
@@ -23,6 +25,27 @@ const Challenges = () => {
     limit: 20,
     total: 0
   });
+
+  // Icon mapping for challenge icons
+  const iconMap = {
+    target: Target,
+    activity: Activity,
+    leaf: Leaf,
+    heart: Heart,
+    globe: Globe,
+    recycle: Recycle,
+    user: User,
+    brain: Brain,
+    book: BookOpen,
+    dumbbell: Dumbbell,
+    tree: TreePine,
+    zap: Zap
+  };
+
+  const renderChallengeIcon = (iconName) => {
+    const IconComponent = iconMap[iconName] || Target;
+    return <IconComponent size={20} />;
+  };
 
   useEffect(() => {
     fetchChallenges();
@@ -295,7 +318,7 @@ const Challenges = () => {
               <tr key={challenge._id}>
                 <td>
                   <div className="challenge-info">
-                    <span className="challenge-icon">{challenge.icon}</span>
+                    <span className="challenge-icon">{renderChallengeIcon(challenge.icon)}</span>
                     <div>
                       <div className="challenge-title">{challenge.title}</div>
                       <div className="challenge-category">{challenge.category}</div>

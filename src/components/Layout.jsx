@@ -1,8 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
-import { BarChart3, Users, FileText, MapPin, LogOut, Clock, Target } from 'lucide-react';
+import { BarChart3, Users, FileText, MapPin, Clock, Target } from 'lucide-react';
 import './Layout.css';
 
-const Layout = ({ children, onLogout }) => {
+const Layout = ({ children }) => {
   const location = useLocation();
 
   const menuItems = [
@@ -40,11 +40,6 @@ const Layout = ({ children, onLogout }) => {
             );
           })}
         </nav>
-
-        <button className="logout-btn" onClick={onLogout}>
-          <LogOut size={20} />
-          <span>Logout</span>
-        </button>
       </aside>
 
       <main className="main-content">

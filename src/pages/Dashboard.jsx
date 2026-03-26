@@ -1,16 +1,45 @@
 import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { Users, FileText, MapPin, Clock, Search, Bell, ChevronDown, TrendingUp, TrendingDown, CheckCircle, XCircle } from 'lucide-react';
+import { Users, FileText, MapPin, Clock, Search, ChevronDown, TrendingUp, TrendingDown, CheckCircle, XCircle, LogOut, AlertTriangle } from 'lucide-react';
 import './Dashboard.css';
 
-const Dashboard = () => {
+const Dashboard = ({ onLogout }) => {
   const [stats, setStats] = useState(null);
   const [recentPosts, setRecentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownOpen && !event.target.closest('.profile-dropdown-container')) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
+  const handleLogout = () => {
+    setShowLogoutModal(true);
+    setDropdownOpen(false);
+  };
+
+  const confirmLogout = () => {
+    onLogout();
+    setShowLogoutModal(false);
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutModal(false);
+  };
 
   const fetchDashboardData = async () => {
     try {
@@ -144,14 +173,24 @@ const Dashboard = () => {
             <Search size={18} />
             <input type="text" placeholder="Search..." />
           </div>
-          <button className="notification-btn">
-            <Bell size={20} />
-            <span className="notification-badge">3</span>
-          </button>
-          <div className="profile-dropdown">
-            <div className="profile-avatar">A</div>
-            <span className="profile-name">Admin</span>
-            <ChevronDown size={16} />
+          <div className="profile-dropdown-container">
+            <div 
+              className="profile-dropdown" 
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <div className="profile-avatar">A</div>
+              <span className="profile-name">Admin</span>
+              <ChevronDown size={16} className={`dropdown-arrow ${dropdownOpen ? 'open' : ''}`} />
+            </div>
+            
+            {dropdownOpen && (
+              <div className="dropdown-menu">
+                <div className="dropdown-item logout" onClick={handleLogout}>
+                  <LogOut size={16} />
+                  <span>Logout</span>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -364,6 +403,31 @@ const Dashboard = () => {
           )}
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="modal-overlay">
+          <div className="logout-modal">
+            <div className="modal-header">
+              <h3>
+                <AlertTriangle size={20} />
+                Confirm Logout
+              </h3>
+            </div>
+            <div className="modal-body">
+              <p>Are you sure you want to logout?</p>
+            </div>
+            <div className="modal-footer">
+              <button className="cancel-btn" onClick={cancelLogout}>
+                Cancel
+              </button>
+              <button className="confirm-btn" onClick={confirmLogout}>
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

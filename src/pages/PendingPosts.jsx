@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Eye, Check, X, AlertCircle, Clock, User } from 'lucide-react';
+import { Eye, Check, X, AlertCircle, Clock, User, Filter, SortAsc } from 'lucide-react';
+import AIAnalysisPanel from '../components/AIAnalysisPanel';
 import './PendingPosts.css';
 
 const PendingPosts = () => {
@@ -9,19 +10,68 @@ const PendingPosts = () => {
   const [reviewLoading, setReviewLoading] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [filters, setFilters] = useState({
+    confidence: 'all', // all, high, medium, low
+    recommendation: 'all', // all, auto_approve, auto_reject, manual_review
+    sortBy: 'date' // date, confidence, quality
+  });
+  const [pagination, setPagination] = useState({
+    skip: 0,
+    limit: 20,
+    total: 0
+  });
 
   useEffect(() => {
     fetchPendingPosts();
-  }, []);
+  }, [filters, pagination.skip]);
 
   const fetchPendingPosts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8000/admin/posts/pending?skip=0&limit=50');
+      const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        console.error('No admin token found');
+        return;
+      }
+      
+      const response = await fetch(`http://localhost:8000/admin/posts/pending?skip=${pagination.skip}&limit=${pagination.limit}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const data = await response.json();
 
       if (data.success) {
-        setPosts(data.posts);
+        let filteredPosts = data.posts;
+        
+        // Apply filters
+        if (filters.confidence !== 'all') {
+          filteredPosts = filteredPosts.filter(post => 
+            post.ai_summary?.confidence_level === filters.confidence
+          );
+        }
+        
+        if (filters.recommendation !== 'all') {
+          filteredPosts = filteredPosts.filter(post => 
+            post.ai_summary?.ai_recommendation === filters.recommendation
+          );
+        }
+        
+        // Apply sorting
+        filteredPosts.sort((a, b) => {
+          switch (filters.sortBy) {
+            case 'confidence':
+              return (b.ai_summary?.face_confidence || 0) - (a.ai_summary?.face_confidence || 0);
+            case 'quality':
+              return (b.ai_summary?.quality_score || 0) - (a.ai_summary?.quality_score || 0);
+            default: // date
+              return b.createdAt - a.createdAt;
+          }
+        });
+        
+        setPosts(filteredPosts);
+        setPagination(prev => ({ ...prev, total: data.total }));
       }
     } catch (error) {
       console.error('Error fetching pending posts:', error);
@@ -32,7 +82,18 @@ const PendingPosts = () => {
 
   const handleViewDetails = async (postId) => {
     try {
-      const response = await fetch(`http://localhost:8000/admin/posts/${postId}/review-details`);
+      const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        console.error('No admin token found');
+        return;
+      }
+      
+      const response = await fetch(`http://localhost:8000/admin/posts/${postId}/review-details`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       const data = await response.json();
 
       if (data.success) {
@@ -48,9 +109,19 @@ const PendingPosts = () => {
 
     try {
       setReviewLoading(true);
+      const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        console.error('No admin token found');
+        return;
+      }
+      
       const response = await fetch(`http://localhost:8000/admin/posts/${postId}/approve`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           adminId: 'admin123',
           notes: 'Approved after manual review'
@@ -80,9 +151,19 @@ const PendingPosts = () => {
 
     try {
       setReviewLoading(true);
+      const token = localStorage.getItem('adminToken');
+      
+      if (!token) {
+        console.error('No admin token found');
+        return;
+      }
+      
       const response = await fetch(`http://localhost:8000/admin/posts/${postId}/reject`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           adminId: 'admin123',
           reason: rejectReason,
@@ -139,6 +220,46 @@ const PendingPosts = () => {
         </div>
       </div>
 
+      {/* Filter Controls */}
+      <div className="filter-controls">
+        <div className="filter-group">
+          <Filter size={16} />
+          <select 
+            value={filters.confidence} 
+            onChange={(e) => setFilters({...filters, confidence: e.target.value})}
+          >
+            <option value="all">All Confidence Levels</option>
+            <option value="high">High Confidence (80%+)</option>
+            <option value="medium">Medium Confidence (50-79%)</option>
+            <option value="low">Low Confidence (&lt;50%)</option>
+          </select>
+        </div>
+        
+        <div className="filter-group">
+          <select 
+            value={filters.recommendation} 
+            onChange={(e) => setFilters({...filters, recommendation: e.target.value})}
+          >
+            <option value="all">All Recommendations</option>
+            <option value="auto_approve">Auto-Approve Recommended</option>
+            <option value="manual_review">Manual Review Required</option>
+            <option value="auto_reject">Auto-Reject Recommended</option>
+          </select>
+        </div>
+        
+        <div className="filter-group">
+          <SortAsc size={16} />
+          <select 
+            value={filters.sortBy} 
+            onChange={(e) => setFilters({...filters, sortBy: e.target.value})}
+          >
+            <option value="date">Sort by Date</option>
+            <option value="confidence">Sort by Face Confidence</option>
+            <option value="quality">Sort by Image Quality</option>
+          </select>
+        </div>
+      </div>
+
       {/* Posts Content */}
       <div className="posts-content">
         {loading ? (
@@ -177,6 +298,11 @@ const PendingPosts = () => {
 
                   <p className="caption">{post.caption}</p>
 
+                  {/* AI Analysis Summary */}
+                  {post.ai_summary && (
+                    <AIAnalysisPanel aiAnalysis={post.ai_summary} compact={true} />
+                  )}
+
                   <div className="ai-results">
                     <div className="ai-label">AI Detected:</div>
                     <div className="detected-objects">
@@ -212,6 +338,11 @@ const PendingPosts = () => {
             </div>
 
             <div className="modal-body">
+              {/* AI Analysis Section */}
+              {selectedPost.ai_analysis && (
+                <AIAnalysisPanel aiAnalysis={selectedPost.ai_analysis} />
+              )}
+
               <div className="user-section">
                 <h3>User Information</h3>
                 <div className="user-details">

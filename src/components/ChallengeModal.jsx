@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
-import { X, Save, Plus, Trash2, Users, BarChart3, Calendar } from 'lucide-react';
+import { 
+  X, Save, Plus, Trash2, Users, BarChart3, Calendar,
+  Target, Activity, Leaf, Heart, Globe, Recycle, 
+  User, Brain, BookOpen, Dumbbell, TreePine, Zap
+} from 'lucide-react';
 import './ChallengeModal.css';
 
 const ChallengeModal = ({ challenge, onClose }) => {
@@ -10,7 +14,7 @@ const ChallengeModal = ({ challenge, onClose }) => {
     duration_days: 7,
     reward_points: 100,
     category: 'fitness',
-    icon: '🎯',
+    icon: 'target',
     difficulty: 'easy',
     tips: [''],
     allow_one_skip: false,
@@ -34,7 +38,7 @@ const ChallengeModal = ({ challenge, onClose }) => {
         duration_days: challenge.duration_days || 7,
         reward_points: challenge.reward_points || 100,
         category: challenge.category || 'fitness',
-        icon: challenge.icon || '🎯',
+        icon: challenge.icon || 'target',
         difficulty: challenge.difficulty || 'easy',
         tips: challenge.tips?.length > 0 ? challenge.tips : [''],
         allow_one_skip: challenge.allow_one_skip || false,
@@ -141,7 +145,20 @@ const ChallengeModal = ({ challenge, onClose }) => {
     }
   };
 
-  const iconOptions = ['🎯', '🏃‍♂️', '🌱', '💚', '🌍', '♻️', '🚶‍♂️', '🧘‍♀️', '📚', '💪', '🌿', '🔋'];
+  const iconOptions = [
+    { icon: Target, name: 'target' },
+    { icon: Activity, name: 'activity' },
+    { icon: Leaf, name: 'leaf' },
+    { icon: Heart, name: 'heart' },
+    { icon: Globe, name: 'globe' },
+    { icon: Recycle, name: 'recycle' },
+    { icon: User, name: 'user' },
+    { icon: Brain, name: 'brain' },
+    { icon: BookOpen, name: 'book' },
+    { icon: Dumbbell, name: 'dumbbell' },
+    { icon: TreePine, name: 'tree' },
+    { icon: Zap, name: 'zap' }
+  ];
   const categoryOptions = ['fitness', 'environment', 'mindfulness', 'community', 'education', 'health'];
   const difficultyOptions = ['easy', 'medium', 'hard'];
 
@@ -208,14 +225,14 @@ const ChallengeModal = ({ challenge, onClose }) => {
                 <div className="form-group">
                   <label>Icon</label>
                   <div className="icon-selector">
-                    {iconOptions.map(icon => (
+                    {iconOptions.map(({ icon: IconComponent, name }) => (
                       <button
-                        key={icon}
+                        key={name}
                         type="button"
-                        className={`icon-option ${formData.icon === icon ? 'selected' : ''}`}
-                        onClick={() => handleInputChange('icon', icon)}
+                        className={`icon-option ${formData.icon === name ? 'selected' : ''}`}
+                        onClick={() => handleInputChange('icon', name)}
                       >
-                        {icon}
+                        <IconComponent size={20} />
                       </button>
                     ))}
                   </div>

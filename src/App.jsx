@@ -90,10 +90,10 @@ function App() {
 
   return (
     <Router>
-      <Layout onLogout={handleLogout}>
+      <Layout>
         <Routes>
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard onLogout={handleLogout} />} />
           <Route path="/users" element={<Users />} />
           <Route path="/posts" element={<Posts />} />
           <Route path="/pending-posts" element={<PendingPosts />} />
