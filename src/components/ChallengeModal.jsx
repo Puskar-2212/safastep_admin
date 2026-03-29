@@ -228,18 +228,18 @@ const ChallengeModal = ({ challenge, onClose }) => {
   };
 
   const iconOptions = [
-    { icon: Target, name: 'target' },
-    { icon: Activity, name: 'activity' },
-    { icon: Leaf, name: 'leaf' },
-    { icon: Heart, name: 'heart' },
-    { icon: Globe, name: 'globe' },
-    { icon: Recycle, name: 'recycle' },
-    { icon: User, name: 'user' },
-    { icon: Brain, name: 'brain' },
-    { icon: BookOpen, name: 'book' },
-    { icon: Dumbbell, name: 'dumbbell' },
-    { icon: TreePine, name: 'tree' },
-    { icon: Zap, name: 'zap' }
+    { icon: Target, name: 'target', label: 'Goal-oriented challenges' },
+    { icon: Activity, name: 'activity', label: 'Physical activity & fitness' },
+    { icon: Leaf, name: 'leaf', label: 'Environmental & eco-friendly' },
+    { icon: Heart, name: 'heart', label: 'Health & wellness' },
+    { icon: Globe, name: 'globe', label: 'Community & global impact' },
+    { icon: Recycle, name: 'recycle', label: 'Recycling & sustainability' },
+    { icon: User, name: 'user', label: 'Personal development' },
+    { icon: Brain, name: 'brain', label: 'Mental & mindfulness' },
+    { icon: BookOpen, name: 'book', label: 'Learning & education' },
+    { icon: Dumbbell, name: 'dumbbell', label: 'Exercise & strength' },
+    { icon: TreePine, name: 'tree', label: 'Nature & conservation' },
+    { icon: Zap, name: 'zap', label: 'Energy & motivation' }
   ];
   const categoryOptions = ['fitness', 'environment', 'mindfulness', 'community', 'education', 'health'];
   const difficultyOptions = ['easy', 'medium', 'hard'];
@@ -307,12 +307,13 @@ const ChallengeModal = ({ challenge, onClose }) => {
                 <div className="form-group">
                   <label>Icon</label>
                   <div className="icon-selector">
-                    {iconOptions.map(({ icon: IconComponent, name }) => (
+                    {iconOptions.map(({ icon: IconComponent, name, label }) => (
                       <button
                         key={name}
                         type="button"
                         className={`icon-option ${formData.icon === name ? 'selected' : ''}`}
                         onClick={() => handleInputChange('icon', name)}
+                        title={label}
                       >
                         <IconComponent size={20} />
                       </button>
