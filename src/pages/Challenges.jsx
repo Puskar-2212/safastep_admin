@@ -48,9 +48,24 @@ const Challenges = () => {
   };
 
   useEffect(() => {
+    // Debounce search to avoid too many API calls
+    const timeoutId = setTimeout(() => {
+      setPagination(prev => ({ ...prev, skip: 0 })); // Reset to first page on search
+      fetchChallenges();
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [filters.search]);
+
+  useEffect(() => {
+    setPagination(prev => ({ ...prev, skip: 0 })); // Reset to first page on filter change
     fetchChallenges();
     fetchAnalytics();
-  }, [filters, pagination.skip]);
+  }, [filters.status, filters.difficulty, filters.category]);
+
+  useEffect(() => {
+    fetchChallenges();
+  }, [pagination.skip]);
 
   const fetchChallenges = async () => {
     try {
@@ -249,15 +264,6 @@ const Challenges = () => {
       <div className="page-header">
         <h1>Challenge Management</h1>
         <div className="header-actions">
-          <div className="search-bar">
-            <Search size={20} />
-            <input 
-              type="text" 
-              placeholder="Search challenges..."
-              value={filters.search}
-              onChange={(e) => setFilters({...filters, search: e.target.value})}
-            />
-          </div>
           <button className="create-btn" onClick={handleCreateChallenge}>
             <Plus size={20} />
             Create Challenge
@@ -265,37 +271,49 @@ const Challenges = () => {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="filters-panel">
-        <select 
-          value={filters.status} 
-          onChange={(e) => setFilters({...filters, status: e.target.value})}
-        >
-          <option value="">All Status</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-        
-        <select 
-          value={filters.difficulty} 
-          onChange={(e) => setFilters({...filters, difficulty: e.target.value})}
-        >
-          <option value="">All Difficulties</option>
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-        </select>
+      {/* Search and Filters */}
+      <div className="search-filters-section">
+        <div className="search-wrapper">
+          <Search size={18} />
+          <input 
+            type="text" 
+            placeholder="Search challenges..."
+            value={filters.search}
+            onChange={(e) => setFilters({...filters, search: e.target.value})}
+            className="search-input"
+          />
+        </div>
+        <div className="filters-group">
+          <select 
+            value={filters.status} 
+            onChange={(e) => setFilters({...filters, status: e.target.value})}
+          >
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          
+          <select 
+            value={filters.difficulty} 
+            onChange={(e) => setFilters({...filters, difficulty: e.target.value})}
+          >
+            <option value="">All Difficulties</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
 
-        <select 
-          value={filters.category} 
-          onChange={(e) => setFilters({...filters, category: e.target.value})}
-        >
-          <option value="">All Categories</option>
-          <option value="fitness">Fitness</option>
-          <option value="environment">Environment</option>
-          <option value="mindfulness">Mindfulness</option>
-          <option value="community">Community</option>
-        </select>
+          <select 
+            value={filters.category} 
+            onChange={(e) => setFilters({...filters, category: e.target.value})}
+          >
+            <option value="">All Categories</option>
+            <option value="fitness">Fitness</option>
+            <option value="environment">Environment</option>
+            <option value="mindfulness">Mindfulness</option>
+            <option value="community">Community</option>
+          </select>
+        </div>
       </div>
 
       {/* Challenges Table */}

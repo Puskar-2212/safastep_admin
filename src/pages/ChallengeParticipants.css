@@ -1,0 +1,203 @@
+.challenge-participants-container {
+  padding: 24px;
+  background: #0f172a;
+  min-height: 100vh;
+  color: #fff;
+}
+
+.participants-header {
+  margin-bottom: 32px;
+}
+
+.back-button {
+  background: #1e293b;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-bottom: 20px;
+  transition: background 0.2s;
+}
+
+.back-button:hover {
+  background: #334155;
+}
+
+.challenge-info h1 {
+  font-size: 28px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.challenge-info p {
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.challenge-stats {
+  display: flex;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.stat-item {
+  background: #1e293b;
+  padding: 16px 24px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.stat-value.locked {
+  color: #f59e0b;
+}
+
+.participants-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #1e293b;
+  border-radius: 12px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.filter-group select {
+  background: #0f172a;
+  color: #fff;
+  border: 1px solid #334155;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.unlock-all-button {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: transform 0.2s;
+}
+
+.unlock-all-button:hover {
+  transform: translateY(-2px);
+}
+
+.participants-table-container {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.participants-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.participants-table thead {
+  background: #0f172a;
+}
+
+.participants-table th {
+  padding: 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.participants-table td {
+  padding: 16px;
+  border-top: 1px solid #334155;
+  font-size: 14px;
+  color: #e2e8f0;
+}
+
+.participants-table tbody tr:hover {
+  background: #0f172a;
+}
+
+.user-id {
+  font-family: 'Courier New', monospace;
+  color: #60a5fa;
+}
+
+.lock-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.lock-status.locked {
+  background: #f59e0b20;
+  color: #f59e0b;
+}
+
+.lock-status.unlocked {
+  background: #10b98120;
+  color: #10b981;
+}
+
+.unlock-button {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  transition: transform 0.2s;
+}
+
+.unlock-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.unlock-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px;
+  color: #94a3b8;
+  font-size: 16px;
+}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { 
   X, Save, Plus, Trash2, Users, BarChart3, Calendar,
   Target, Activity, Leaf, Heart, Globe, Recycle, 
-  User, Brain, BookOpen, Dumbbell, TreePine, Zap
+  User, Brain, BookOpen, Dumbbell, TreePine, Zap, Lock, Unlock
 } from 'lucide-react';
 import './ChallengeModal.css';
 
@@ -26,6 +26,8 @@ const ChallengeModal = ({ challenge, onClose }) => {
   const [activeTab, setActiveTab] = useState('basic');
   const [challengeStats, setChallengeStats] = useState(null);
   const [participants, setParticipants] = useState([]);
+  const [unlockingUser, setUnlockingUser] = useState(null);
+  const [unlockingAll, setUnlockingAll] = useState(false);
 
   const isEditing = !!challenge;
 
@@ -65,6 +67,16 @@ const ChallengeModal = ({ challenge, onClose }) => {
       if (data.success) {
         setChallengeStats(data.challenge.stats);
         setParticipants(data.challenge.recent_participants || []);
+      }
+
+      // Fetch participants with lock status
+      const participantsResponse = await fetch(`http://localhost:8000/admin/challenges/${challengeId}/participants`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      const participantsData = await participantsResponse.json();
+      if (participantsData.success) {
+        setParticipants(participantsData.participants || []);
       }
     } catch (error) {
       console.error('Error fetching challenge details:', error);
@@ -142,6 +154,76 @@ const ChallengeModal = ({ challenge, onClose }) => {
       alert('Error saving challenge');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleUnlockUser = async (userId) => {
+    setUnlockingUser(userId);
+    try {
+      const token = localStorage.getItem('adminToken');
+      
+      // Create form data
+      const formData = new FormData();
+      formData.append('user_id', userId);
+      
+      const response = await fetch(
+        `http://localhost:8000/admin/challenges/${challenge.challenge_id}/unlock`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        }
+      );
+
+      const data = await response.json();
+      if (data.success) {
+        // Refresh participants list
+        await fetchChallengeDetails(challenge.challenge_id);
+        alert(`Successfully unlocked challenge for ${userId}`);
+      } else {
+        alert(data.detail || 'Error unlocking challenge');
+      }
+    } catch (error) {
+      console.error('Error unlocking challenge:', error);
+      alert('Error unlocking challenge');
+    } finally {
+      setUnlockingUser(null);
+    }
+  };
+
+  const handleUnlockAll = async () => {
+    if (!confirm('Are you sure you want to unlock this challenge for all users?')) {
+      return;
+    }
+
+    setUnlockingAll(true);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(
+        `http://localhost:8000/admin/challenges/${challenge.challenge_id}/unlock-all`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      const data = await response.json();
+      if (data.success) {
+        // Refresh participants list
+        await fetchChallengeDetails(challenge.challenge_id);
+        alert(`Successfully unlocked challenge for ${data.unlocked_count} users`);
+      } else {
+        alert(data.detail || 'Error unlocking challenge');
+      }
+    } catch (error) {
+      console.error('Error unlocking all:', error);
+      alert('Error unlocking challenge');
+    } finally {
+      setUnlockingAll(false);
     }
   };
 
@@ -447,20 +529,63 @@ const ChallengeModal = ({ challenge, onClose }) => {
 
           {activeTab === 'participants' && (
             <div className="tab-content">
-              <h4>Recent Participants</h4>
+              <div className="participants-header">
+                <h4>Participants ({participants.length})</h4>
+                {participants.some(p => p.in_cooldown) && (
+                  <button 
+                    className="unlock-all-btn"
+                    onClick={handleUnlockAll}
+                    disabled={unlockingAll}
+                  >
+                    <Unlock size={16} />
+                    {unlockingAll ? 'Unlocking...' : 'Unlock All'}
+                  </button>
+                )}
+              </div>
               {participants.length > 0 ? (
                 <div className="participants-list">
                   {participants.map((participant, index) => (
                     <div key={index} className="participant-item">
                       <div className="participant-info">
-                        <strong>{participant.user_id}</strong>
-                        <span className={`status ${participant.status}`}>
-                          {participant.status}
-                        </span>
+                        <div className="participant-name">
+                          <strong>{participant.user_id}</strong>
+                          {participant.in_cooldown && (
+                            <span className="lock-badge">
+                              <Lock size={12} />
+                              Locked {participant.cooldown_days_left} days
+                            </span>
+                          )}
+                          {!participant.in_cooldown && participant.status === 'completed' && (
+                            <span className="available-badge">
+                              ✅ Available
+                            </span>
+                          )}
+                        </div>
+                        <div className="participant-actions">
+                          <span className={`status ${participant.status}`}>
+                            {participant.status}
+                          </span>
+                          {participant.in_cooldown && (
+                            <button
+                              className="unlock-btn"
+                              onClick={() => handleUnlockUser(participant.user_id)}
+                              disabled={unlockingUser === participant.user_id}
+                            >
+                              <Unlock size={14} />
+                              {unlockingUser === participant.user_id ? 'Unlocking...' : 'Unlock'}
+                            </button>
+                          )}
+                        </div>
                       </div>
                       <div className="participant-stats">
                         <span>Streak: {participant.current_streak || 0}</span>
                         <span>Started: {new Date(participant.started_at).toLocaleDateString()}</span>
+                        {participant.completed_at && (
+                          <span>Completed: {new Date(participant.completed_at).toLocaleDateString()}</span>
+                        )}
+                        {participant.in_cooldown && participant.can_restart_date && (
+                          <span>Can restart: {participant.can_restart_date}</span>
+                        )}
                       </div>
                     </div>
                   ))}

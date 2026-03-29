@@ -102,34 +102,40 @@
   position: relative;
   display: flex;
   align-items: center;
+  isolation: isolate;
 }
 
 .search-bar svg {
   position: absolute;
-  left: 12px;
+  left: 10px;
   color: #6b7280;
+  pointer-events: none;
   z-index: 1;
 }
 
 .search-bar input {
-  background: rgba(31, 41, 55, 0.8);
-  border: 1px solid rgba(75, 85, 99, 0.5);
-  border-radius: 12px;
-  padding: 12px 12px 12px 44px;
-  color: #fff;
-  font-size: 0.875rem;
-  width: 300px;
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid rgba(55, 65, 81, 0.6);
+  border-radius: 8px;
+  padding: 8px 10px 8px 36px;
+  color: #e5e7eb;
+  font-size: 0.813rem;
+  width: 280px;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
 }
 
 .search-bar input:focus {
   outline: none;
-  border-color: #8b5cf6;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  border-color: #6b7280;
+  box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.1);
+  background: rgba(17, 24, 39, 1);
 }
 
 .search-bar input::placeholder {
   color: #6b7280;
+  font-size: 0.813rem;
 }
 
 .create-btn {
@@ -425,4 +431,58 @@
   .challenges-table table {
     min-width: 800px;
   }
+}
+
+
+/* New Search and Filters Section */
+.search-filters-section {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.search-wrapper svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  background: rgba(31, 41, 55, 0.6);
+  border: 1px solid rgba(75, 85, 99, 0.4);
+  border-radius: 10px;
+  padding: 10px 12px 10px 40px;
+  color: #fff;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  background: rgba(31, 41, 55, 0.8);
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.search-input::placeholder {
+  color: #6b7280;
+}
+
+.filters-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }

@@ -169,10 +169,6 @@ const Dashboard = ({ onLogout }) => {
           <h1 className="page-title">Dashboard</h1>
         </div>
         <div className="navbar-right">
-          <div className="search-bar">
-            <Search size={18} />
-            <input type="text" placeholder="Search..." />
-          </div>
           <div className="profile-dropdown-container">
             <div 
               className="profile-dropdown" 
