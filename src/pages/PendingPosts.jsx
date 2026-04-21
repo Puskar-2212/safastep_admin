@@ -9,6 +9,7 @@ const PendingPosts = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [reviewLoading, setReviewLoading] = useState(false);
   const [rejectReason, setRejectReason] = useState('');
+  const [customRejectReason, setCustomRejectReason] = useState('');
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [filters, setFilters] = useState({
     confidence: 'all', // all, high, medium, low
@@ -144,8 +145,10 @@ const PendingPosts = () => {
   };
 
   const handleReject = async (postId) => {
-    if (!rejectReason.trim()) {
-      alert('Please select a rejection reason');
+    const finalReason = rejectReason === 'Other' ? customRejectReason : rejectReason;
+    
+    if (!finalReason.trim()) {
+      alert('Please provide a rejection reason');
       return;
     }
 
@@ -166,7 +169,7 @@ const PendingPosts = () => {
         },
         body: JSON.stringify({
           adminId: 'admin123',
-          reason: rejectReason,
+          reason: finalReason,
           notes: 'Rejected after manual review'
         })
       });
@@ -178,6 +181,7 @@ const PendingPosts = () => {
         setSelectedPost(null);
         setShowRejectModal(false);
         setRejectReason('');
+        setCustomRejectReason('');
         fetchPendingPosts();
       }
     } catch (error) {
@@ -457,12 +461,26 @@ const PendingPosts = () => {
               <option value="Other">Other</option>
             </select>
 
+            {rejectReason === 'Other' && (
+              <textarea
+                placeholder="Please specify the reason for rejection..."
+                className="custom-reason-input"
+                value={customRejectReason}
+                onChange={(e) => setCustomRejectReason(e.target.value)}
+                rows={4}
+              />
+            )}
+
             <div className="reject-modal-actions">
-              <button onClick={() => setShowRejectModal(false)}>Cancel</button>
+              <button onClick={() => {
+                setShowRejectModal(false);
+                setRejectReason('');
+                setCustomRejectReason('');
+              }}>Cancel</button>
               <button 
                 className="confirm-reject-btn"
                 onClick={() => handleReject(selectedPost.post._id)}
-                disabled={!rejectReason}
+                disabled={!rejectReason || (rejectReason === 'Other' && !customRejectReason.trim())}
               >
                 Confirm Rejection
               </button>

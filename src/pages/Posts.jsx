@@ -85,18 +85,32 @@ const Posts = () => {
   };
 
   const handleDeletePost = async (postId) => {
-    if (!window.confirm('Are you sure you want to delete this post and all associated likes?')) {
+    // Show custom dialog for deletion reason
+    const reason = prompt(
+      'Please provide a reason for deleting this post (the user will be notified):',
+      'Violated community guidelines'
+    );
+    
+    // If user cancels, return
+    if (reason === null) {
       return;
     }
+    
+    // If reason is empty, use default
+    const finalReason = reason.trim() || 'Violated community guidelines';
 
     try {
       const response = await fetch(`http://localhost:8000/admin/posts/${postId}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ reason: finalReason }),
       });
       const data = await response.json();
 
       if (data.success) {
-        alert('Post deleted successfully');
+        alert('Post deleted successfully. User has been notified.');
         setSelectedPost(null);
         fetchPosts();
       } else {
@@ -189,7 +203,7 @@ const Posts = () => {
                       {truncateCaption(post.caption || 'No caption')}
                     </td>
                     <td className="likes-cell">
-                      <span className="likes-badge"><Heart size={16} /> {post.likes || 0}</span>
+                      <span className="likes-badge"><Heart size={16} /> {post.likesCount || 0}</span>
                     </td>
                     <td>
                       {new Date(post.createdAt * 1000).toLocaleDateString()}
@@ -250,99 +264,122 @@ const Posts = () => {
       {/* Post Details Modal */}
       {selectedPost && (
         <div className="modal-overlay" onClick={() => setSelectedPost(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Post Details</h2>
-              <button
-                className="modal-close"
-                onClick={() => setSelectedPost(null)}
-              >
-                <X size={24} />
-              </button>
-            </div>
-
+          <div className="post-modal-content" onClick={(e) => e.stopPropagation()}>
             {detailsLoading ? (
               <div className="modal-loading">Loading post details...</div>
             ) : postDetails ? (
-              <div className="modal-body">
-                <div className="post-user-section">
-                  <div className="post-user-avatar">
-                    {postDetails.post.firstName?.charAt(0).toUpperCase()}
+              <>
+                <button className="post-modal-close" onClick={() => setSelectedPost(null)}>
+                  <X size={20} />
+                </button>
+                
+                <div className="post-modal-grid">
+                  {/* Left Side - Image */}
+                  <div className="post-modal-image-side">
+                    {postDetails.post.imageUrl ? (
+                      <img
+                        src={postDetails.post.imageUrl.replace(/https:\/\/[^/]+\.ngrok-free\.dev/, 'http://localhost:8000')}
+                        alt="Post"
+                        className="post-modal-image"
+                        onError={(e) => {
+                          e.target.src = 'https://via.placeholder.com/600x800?text=Image+Not+Available';
+                        }}
+                      />
+                    ) : (
+                      <div className="post-modal-no-image">No Image</div>
+                    )}
                   </div>
-                  <div className="post-user-info">
-                    <div className="post-user-name">
-                      {postDetails.post.firstName} {postDetails.post.lastName}
+
+                  {/* Right Side - Details */}
+                  <div className="post-modal-details-side">
+                    {/* User Info */}
+                    <div className="post-modal-user">
+                      <div className="post-modal-avatar">
+                        {postDetails.post.firstName?.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="post-modal-user-info">
+                        <div className="post-modal-user-name">
+                          {postDetails.post.firstName} {postDetails.post.lastName}
+                        </div>
+                        <div className="post-modal-user-contact">
+                          {postDetails.post.mobile || postDetails.post.email || 'N/A'}
+                        </div>
+                      </div>
                     </div>
-                    <div className="post-user-mobile">
-                      {postDetails.post.mobile || postDetails.post.email || 'N/A'}
+
+                    {/* Category */}
+                    {postDetails.post.category && (
+                      <div className="post-modal-section">
+                        <div className="post-modal-label">Category</div>
+                        <div className="post-modal-category">
+                          {postDetails.post.category.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Caption */}
+                    <div className="post-modal-section">
+                      <div className="post-modal-label">Caption</div>
+                      <div className="post-modal-caption">
+                        {postDetails.post.caption || 'No caption provided'}
+                      </div>
                     </div>
-                    <div className="post-date">
-                      {new Date(postDetails.post.createdAt * 1000).toLocaleString()}
+
+                    {/* Stats Row */}
+                    <div className="post-modal-section">
+                      <div className="post-modal-label">Statistics</div>
+                      <div className="post-modal-stats-row">
+                        <div className="post-modal-stat-item">
+                          <Heart size={16} />
+                          <span>{postDetails.stats.likes_count}</span>
+                        </div>
+                        <div className="post-modal-stat-item status">
+                          <span className={`post-modal-status-badge ${postDetails.post.verificationStatus === 'approved' ? 'approved' : 'pending'}`}>
+                            {postDetails.post.verificationStatus === 'approved' ? 'Approved' : 
+                             postDetails.post.verificationStatus === 'pending_review' ? 'Pending' : 
+                             postDetails.post.verificationStatus || 'Unknown'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Eco Points & Date Grid */}
+                    <div className="post-modal-grid-info">
+                      <div className="post-modal-info-card">
+                        <div className="post-modal-label">Eco Points</div>
+                        <div className="post-modal-info-value eco">
+                          {postDetails.post.ecoPoints || 0}
+                        </div>
+                      </div>
+                      <div className="post-modal-info-card">
+                        <div className="post-modal-label">CO2 Offset</div>
+                        <div className="post-modal-info-value co2">
+                          {postDetails.post.co2Offset || 0} kg
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Posted Date */}
+                    <div className="post-modal-section">
+                      <div className="post-modal-label">Posted</div>
+                      <div className="post-modal-date">
+                        {new Date(postDetails.post.createdAt * 1000).toLocaleString()}
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="post-modal-actions">
+                      <button
+                        className="post-modal-btn delete"
+                        onClick={() => handleDeletePost(selectedPost)}
+                      >
+                        <Trash2 size={18} />
+                        Delete Post
+                      </button>
                     </div>
                   </div>
                 </div>
-
-                <div className="post-caption-section">
-                  <h3>Caption</h3>
-                  <p>{postDetails.post.caption || 'No caption'}</p>
-                </div>
-
-                {postDetails.post.imageUrl && (
-                  <div className="post-image-section">
-                    <h3>Image</h3>
-                    <img
-                      src={postDetails.post.imageUrl.replace(/https:\/\/[^/]+\.ngrok-free\.dev/, 'http://localhost:8000')}
-                      alt="Post"
-                      className="post-image"
-                      onError={(e) => {
-                        console.error('Image failed to load:', postDetails.post.imageUrl);
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                    <p className="image-url-debug" style={{fontSize: '10px', color: '#999', marginTop: '8px'}}>
-                      Original: {postDetails.post.imageUrl}
-                    </p>
-                  </div>
-                )}
-
-                <div className="post-stats-section">
-                  <h3>Statistics</h3>
-                  <div className="stats-grid">
-                    <div className="stat-card">
-                      <div className="stat-value">{postDetails.stats.likes_count}</div>
-                      <div className="stat-label">Likes</div>
-                    </div>
-                    <div className="stat-card">
-                      <div className="stat-value">{postDetails.post.verified ? '✓' : '✗'}</div>
-                      <div className="stat-label">Verified</div>
-                    </div>
-                  </div>
-                </div>
-
-                {postDetails.post.ecoPoints && (
-                  <div className="eco-points-section">
-                    <h3>Eco Points</h3>
-                    <p className="eco-points-value">🌱 {postDetails.post.ecoPoints}</p>
-                  </div>
-                )}
-
-                <div className="modal-actions">
-                  <button
-                    className="action-delete"
-                    onClick={() => {
-                      handleDeletePost(selectedPost);
-                    }}
-                  >
-                    Delete Post
-                  </button>
-                  <button
-                    className="action-close"
-                    onClick={() => setSelectedPost(null)}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
+              </>
             ) : (
               <div className="modal-error">Failed to load post details</div>
             )}

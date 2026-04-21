@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { BarChart3, Users, FileText, MapPin, Clock, Target } from 'lucide-react';
+import { BarChart3, Users, FileText, MapPin, Clock, Target, Megaphone } from 'lucide-react';
 import './Layout.css';
 
 const Layout = ({ children }) => {
@@ -10,6 +10,7 @@ const Layout = ({ children }) => {
     { path: '/users', icon: Users, label: 'Users' },
     { path: '/posts', icon: FileText, label: 'Posts' },
     { path: '/pending-posts', icon: Clock, label: 'Pending Posts' },
+    { path: '/announcements', icon: Megaphone, label: 'Announcements' },
     { path: '/challenges', icon: Target, label: 'Challenges' },
     { path: '/eco-locations', icon: MapPin, label: 'Eco Locations' },
   ];

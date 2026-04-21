@@ -2,9 +2,13 @@ import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Users, FileText, MapPin, Clock, Search, ChevronDown, TrendingUp, TrendingDown, CheckCircle, XCircle, LogOut, AlertTriangle } from 'lucide-react';
 import './Dashboard.css';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = ({ onLogout }) => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState(null);
+  const [growthData, setGrowthData] = useState([]);
+  const [trends, setTrends] = useState({ userGrowth: 0, postGrowth: 0 });
   const [recentPosts, setRecentPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -67,6 +71,17 @@ const Dashboard = ({ onLogout }) => {
       
       const statsData = await statsResponse.json();
       
+      // Fetch growth data
+      const growthResponse = await fetch('http://localhost:8000/admin/growth-data?months=6', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      console.log('Dashboard: Growth response status:', growthResponse.status);
+      
+      const growthDataResult = await growthResponse.json();
+      
       // Fetch recent posts for activity
       const postsResponse = await fetch('http://localhost:8000/admin/posts?limit=5', {
         headers: {
@@ -83,6 +98,14 @@ const Dashboard = ({ onLogout }) => {
         setStats(statsData.stats);
       } else {
         console.error('Failed to fetch stats:', statsResponse.status, statsData);
+      }
+      
+      if (growthDataResult.success) {
+        console.log('Dashboard: Growth data loaded successfully:', growthDataResult.growthData.length, 'months');
+        setGrowthData(growthDataResult.growthData);
+        setTrends(growthDataResult.trends);
+      } else {
+        console.error('Failed to fetch growth data:', growthResponse.status, growthDataResult);
       }
       
       if (postsData.success) {
@@ -114,13 +137,17 @@ const Dashboard = ({ onLogout }) => {
     );
   }
 
-  const chartData = [
-    { name: 'Jan', posts: Math.floor((stats.totalPosts || 0) * 0.4), users: Math.floor((stats.totalUsers || 0) * 0.5) },
-    { name: 'Feb', posts: Math.floor((stats.totalPosts || 0) * 0.5), users: Math.floor((stats.totalUsers || 0) * 0.6) },
-    { name: 'Mar', posts: Math.floor((stats.totalPosts || 0) * 0.6), users: Math.floor((stats.totalUsers || 0) * 0.7) },
-    { name: 'Apr', posts: Math.floor((stats.totalPosts || 0) * 0.75), users: Math.floor((stats.totalUsers || 0) * 0.8) },
-    { name: 'May', posts: Math.floor((stats.totalPosts || 0) * 0.9), users: Math.floor((stats.totalUsers || 0) * 0.9) },
-    { name: 'Jun', posts: stats.totalPosts || 0, users: stats.totalUsers || 0 },
+  const chartData = growthData.length > 0 ? growthData.map(item => ({
+    name: item.month,
+    posts: item.posts,
+    users: item.users
+  })) : [
+    { name: 'Jan', posts: 0, users: 0 },
+    { name: 'Feb', posts: 0, users: 0 },
+    { name: 'Mar', posts: 0, users: 0 },
+    { name: 'Apr', posts: 0, users: 0 },
+    { name: 'May', posts: 0, users: 0 },
+    { name: 'Jun', posts: 0, users: 0 },
   ];
 
   const pieData = [
@@ -198,9 +225,9 @@ const Dashboard = ({ onLogout }) => {
             <div className="card-icon users">
               <Users size={24} />
             </div>
-            <div className="card-trend positive">
-              <TrendingUp size={16} />
-              <span>12.5%</span>
+            <div className={`card-trend ${trends.userGrowth >= 0 ? 'positive' : 'negative'}`}>
+              {trends.userGrowth >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
+              <span>{Math.abs(trends.userGrowth)}%</span>
             </div>
           </div>
           <div className="card-body">
@@ -215,9 +242,9 @@ const Dashboard = ({ onLogout }) => {
             <div className="card-icon posts">
               <FileText size={24} />
             </div>
-            <div className="card-trend positive">
-              <TrendingUp size={16} />
-              <span>8.3%</span>
+            <div className={`card-trend ${trends.postGrowth >= 0 ? 'positive' : 'negative'}`}>
+              {trends.postGrowth >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
+              <span>{Math.abs(trends.postGrowth)}%</span>
             </div>
           </div>
           <div className="card-body">
@@ -424,6 +451,25 @@ const Dashboard = ({ onLogout }) => {
           </div>
         </div>
       )}
+      
+      {/* Test Navigation Button 
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <button
+          style={{
+            backgroundColor:"#047857",
+            color:'white',
+            padding:'12px 24px',
+            border:'none',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontSize: '16px',
+            fontWeight: '600'
+          }}
+          onClick={() => navigate('/users')}
+        >
+          Go to Users
+        </button>
+      </div> */}
     </div>
   );
 };

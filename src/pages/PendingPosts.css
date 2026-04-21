@@ -551,6 +551,30 @@
   color: #ffffff;
 }
 
+.custom-reason-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  background: rgba(139, 92, 246, 0.05);
+  color: #ffffff;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.custom-reason-input:focus {
+  outline: none;
+  border-color: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+}
+
+.custom-reason-input::placeholder {
+  color: #6b7280;
+}
+
 .reject-modal-actions {
   display: flex;
   gap: 12px;

@@ -529,7 +529,7 @@ const EcoLocations = () => {
 
       {/* Add/Edit Form Modal */}
       {showForm && (
-        <div className="form-modal-overlay" onClick={handleCloseForm}>
+        <div className="form-modal-overlay">
           <div
             className="form-modal"
             ref={modalRef}
@@ -537,9 +537,11 @@ const EcoLocations = () => {
             onMouseDown={handleMouseDown}
             style={{
               position: 'fixed',
-              left: `${modalPosition.x}px`,
-              top: `${modalPosition.y}px`,
+              left: modalPosition.x ? `${modalPosition.x}px` : '50%',
+              top: modalPosition.y ? `${modalPosition.y}px` : '50%',
+              transform: modalPosition.x ? 'none' : 'translate(-50%, -50%)',
               cursor: isDragging ? 'grabbing' : 'grab',
+              pointerEvents: 'auto',
             }}
           >
             <div className="form-header">

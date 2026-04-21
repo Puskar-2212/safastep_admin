@@ -8,6 +8,7 @@ import Posts from './pages/Posts';
 import PendingPosts from './pages/PendingPosts';
 import Challenges from './pages/Challenges';
 import EcoLocations from './pages/EcoLocations';
+import Announcements from './pages/Announcements';
 import './App.css';
 
 function App() {
@@ -97,6 +98,7 @@ function App() {
           <Route path="/users" element={<Users />} />
           <Route path="/posts" element={<Posts />} />
           <Route path="/pending-posts" element={<PendingPosts />} />
+          <Route path="/announcements" element={<Announcements />} />
           <Route path="/challenges" element={<Challenges />} />
           <Route path="/eco-locations" element={<EcoLocations />} />
         </Routes>
